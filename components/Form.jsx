@@ -17,13 +17,22 @@ export default function Form({ pictureUrl, displayName }) {
     return (
         <div>
             <div className="flex justify-center">
-                <Image
-                    className=" m-5 bg-gray-300 border-2 border-gray rounded-full w-36 h-36 drop-shadow-lg"
-                    src={pictureUrl}
-                    alt={displayName}
-                    width={500}
-                    height={500}
-                />
+                {pictureUrl ?
+                    <Image
+                        className=" m-5 bg-gray-300 border-2 border-gray rounded-full w-36 h-36 drop-shadow-lg"
+                        src={pictureUrl}
+                        alt={displayName}
+                        width={500}
+                        height={500}
+                    /> :
+                    <Image
+                        className=" m-5 bg-gray-300 border-2 border-gray rounded-full w-36 h-36 drop-shadow-lg"
+                        src="https://www.w3schools.com/howto/img_avatar.png"
+                        alt='picture'
+                        width={500}
+                        height={500}
+                    />
+                }
             </div>
             <div className="flex justify-center text-gray-600">Name : {displayName}</div>
             <div className="flex justify-center bg-red-100 mt-20">
@@ -31,8 +40,8 @@ export default function Form({ pictureUrl, displayName }) {
                     {/* <button onClick={getLocation()}>Try It</button> */}
                     <span>รายละเอียดปัญหา :</span>
                     <input className=" p-2 border-2 rounded-xl border-gray-500 focus:outline-blue-500" type="text" name="detail" placeholder="Enter message..." />
-                    <select className="mt-2 p-2 border-2 rounded-xl border-gray-500 focus:outline-blue-500" id="cars" name="cars">
-                        <option selected disabled hidden>Choose here</option>
+                    <select defaultValue={'DEFAULT'} className="mt-2 p-2 border-2 rounded-xl border-gray-500 focus:outline-blue-500" id="cars" name="cars">
+                        <option value="DEFAULT" disabled hidden>Choose here</option>
                         <option value="1">One</option>
                         <option value="2">Two</option>
                         <option value="3">Three</option>
