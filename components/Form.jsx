@@ -1,18 +1,41 @@
-'use client';
-'use strict';
-import { useEffect } from 'react'
+// 'use client';
+import { useEffect, useState } from 'react'
 import Image from 'next/image'
 import Camera from './Camera';
-
+// import { longdo, map, LongdoMap } from './LongdoMap';
 export default function Form({ pictureUrl, displayName }) {
+    const [dataLocation, setDataLocation] = useState([]);
+    const [location, setLocation] = useState({})
 
-    useEffect(() => {
-        navigator.geolocation.getCurrentPosition(function (position) {
-            console.log("Latitude is :", position.coords.latitude);
-            console.log("Longitude is :", position.coords.longitude);
-        });
 
-    }, []);
+    // useEffect( () => {
+    //     navigator.geolocation.getCurrentPosition(
+    //         (position) => {
+    //             setLocation({
+    //                 latitude: position.coords.latitude,
+    //                 longitude: position.coords.longitude,
+    //             })
+    //             console.log(position.coords.latitude);
+    //             console.log(position.coords.longitude);
+    //         },
+    //         (error) => {
+    //             console.error(error)
+    //         }
+    //     )
+
+    //     let apiUrl = "https://api.longdo.com/map/services/address?lon=" + 
+    //         location.longitude + "&lat=" + location.latitude + "&key=" + process.env.LONGDO_API_KEY
+
+    //          fetch(apiUrl)
+    //         .then(res => res.json())
+    //         .then(data => {
+    //             setDataLocation(data);
+    //             console.log('dataLocation=', dataLocation);
+    //             console.log("location", location);
+    //             console.log("apiUrl", apiUrl);
+    //         }).catch((e) => { console.log("error", e) });
+
+    // }, []);
 
     return (
         <div>
@@ -31,6 +54,7 @@ export default function Form({ pictureUrl, displayName }) {
                         alt='picture'
                         width={500}
                         height={500}
+                        priority={true}
                     />
                 }
             </div>
@@ -56,3 +80,8 @@ export default function Form({ pictureUrl, displayName }) {
         </div>
     )
 }
+
+
+
+
+
