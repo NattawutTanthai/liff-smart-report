@@ -1,30 +1,25 @@
 import Header from "../components/Header";
 import { useEffect, useState } from 'react'
 import Form from "../components/Form";
-export default function Home({ data }) {
+export default function Home() {
   const [profile, setProfile] = useState({})
-  const [latAndLon, setLatAndLon] = useState("")
-  const [location, setLocation] = useState({})
-
-
-  const setLocationState = async () => {
+  const [address , setAddress] = useState("")
+  
+  const setLocationState = async (lat,long) => {
     let apiUrl = "https://api.longdo.com/map/services/address?lon=" +
-      latAndLon.longitude + "&lat=" + latAndLon.latitude + "&key=" + process.env.LONGDO_API_KEY
+    long + "&lat=" + lat + "&key=" + process.env.LONGDO_API_KEY
     const res = await fetch(apiUrl, { cache: 'no-store' })
     const data = await res.json()
-    setLocation(data)
-    console.log("location = ", data);
+    const address_str = data.subdistrict + " " + data.district + " " + data.province
+    console.log("address_str = ", address_str);
+    setAddress(address_str)
+
   }
 
   const getLatAndLon = () => {
     navigator.geolocation.getCurrentPosition(
       (position) => {
-        setLatAndLon({
-          latitude: position.coords.latitude,
-          longitude: position.coords.longitude,
-        })
-        console.log(position.coords.latitude);
-        console.log(position.coords.longitude);
+        setLocationState(position.coords.latitude, position.coords.longitude);
       },
       (error) => {
         console.error(error)
@@ -32,11 +27,8 @@ export default function Home({ data }) {
     )
   }
 
-
   useEffect(() => {
     getLatAndLon()
-    setLocationState()
-
     import("@line/liff").then((liff) => {
       console.log("LIFF init...");
       liff
@@ -55,11 +47,10 @@ export default function Home({ data }) {
     });
   }, []);
 
-
   return (
     <div>
       <Header />
-      <Form displayName={profile.displayName} pictureUrl={profile.pictureUrl} />
+      <Form displayName={profile.displayName} pictureUrl={profile.pictureUrl} address={address} />
     </div>
   );
 }

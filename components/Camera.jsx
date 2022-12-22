@@ -30,7 +30,7 @@ function Camera() {
     }
     return (
         <>
-            <div className=' flex flex-col justify-center mt-28 p-3'>
+            <div className=' flex flex-col justify-center mt-10 p-3'>
                 <button className='border-2 m-2 border-red-400' onClick={handleClick}>Switch camera</button>
                 <button className='border-2 m-2 border-red-400' onClick={capture}>Capture</button>
                 <Webcam

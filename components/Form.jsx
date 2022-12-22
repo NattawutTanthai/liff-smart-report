@@ -3,40 +3,7 @@ import { useEffect, useState } from 'react'
 import Image from 'next/image'
 import Camera from './Camera';
 // import { longdo, map, LongdoMap } from './LongdoMap';
-export default function Form({ pictureUrl, displayName }) {
-    const [dataLocation, setDataLocation] = useState([]);
-    const [location, setLocation] = useState({})
-
-
-    // useEffect( () => {
-    //     navigator.geolocation.getCurrentPosition(
-    //         (position) => {
-    //             setLocation({
-    //                 latitude: position.coords.latitude,
-    //                 longitude: position.coords.longitude,
-    //             })
-    //             console.log(position.coords.latitude);
-    //             console.log(position.coords.longitude);
-    //         },
-    //         (error) => {
-    //             console.error(error)
-    //         }
-    //     )
-
-    //     let apiUrl = "https://api.longdo.com/map/services/address?lon=" + 
-    //         location.longitude + "&lat=" + location.latitude + "&key=" + process.env.LONGDO_API_KEY
-
-    //          fetch(apiUrl)
-    //         .then(res => res.json())
-    //         .then(data => {
-    //             setDataLocation(data);
-    //             console.log('dataLocation=', dataLocation);
-    //             console.log("location", location);
-    //             console.log("apiUrl", apiUrl);
-    //         }).catch((e) => { console.log("error", e) });
-
-    // }, []);
-
+export default function Form({ pictureUrl, displayName, address}) {
     return (
         <div>
             <div className="flex justify-center">
@@ -64,6 +31,7 @@ export default function Form({ pictureUrl, displayName }) {
                     {/* <button onClick={getLocation()}>Try It</button> */}
                     <span>รายละเอียดปัญหา :</span>
                     <input className=" p-2 border-2 rounded-xl border-gray-500 focus:outline-blue-500" type="text" name="detail" placeholder="Enter message..." />
+                    <span>ประเภท :</span>
                     <select defaultValue={'DEFAULT'} className="mt-2 p-2 border-2 rounded-xl border-gray-500 focus:outline-blue-500" id="cars" name="cars">
                         <option value="DEFAULT" disabled hidden>Choose here</option>
                         <option value="1">One</option>
@@ -72,6 +40,8 @@ export default function Form({ pictureUrl, displayName }) {
                         <option value="4">Four</option>
                         <option value="5">Five</option>
                     </select>
+                    <span>สถานที่ปัจจุบันของคุณ :</span>
+                    <input disabled className=" p-2 border-2 rounded-xl border-gray-500 focus:outline-blue-500" type="text" name="location" placeholder={address}/>
                     <button className="text-white p-1 mt-2 rounded-lg border border-gray-500  bg-emerald-500" type="submit" >save</button>
 
                 </form>
