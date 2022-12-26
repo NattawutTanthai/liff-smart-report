@@ -14,13 +14,10 @@ export default function Home({type}) {
     const res = await fetch(apiUrl, { cache: 'no-store' })
     const data = await res.json()
     const address_str = data.subdistrict + " " + data.district + " " + data.province
-    console.log("address_str = ", address_str);
     setAddress(address_str)
   }
 
   const getLatAndLon = () => {
-    console.log("type = ", type);
-
     navigator.geolocation.getCurrentPosition(
       (position) => {
         setLocationState(position.coords.latitude, position.coords.longitude);
@@ -60,27 +57,6 @@ export default function Home({type}) {
   );
 }
 
-export async function getServerSideProps() {
-    try {
-        let response = await fetch('http://localhost:3000/api/getTypes', {
-            method: 'GET',
-            body: JSON.stringify({ type }),
-            headers: {
-                "Content-Type": "application/json",
-                "Accept": "application/json,text/plain,*/*",
-            },
-        })
-
-        response = await response.json()
-    } catch (error) {
-        console.error(error)
-    }
-    return {
-        props: {
-            type: "response"
-        },
-    }
-}
 
 
 

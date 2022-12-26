@@ -2,8 +2,12 @@
 import { useEffect, useState } from 'react'
 import Image from 'next/image'
 import axios from 'axios'
-export default function Form({ pictureUrl, displayName, address, message }) {
+export default function Form({ pictureUrl, displayName, address }) {
     const [type, setType] = useState([]);
+    const [detail, setDetail] = useState("");
+    const [phone, setPhone] = useState("");
+    const [typeSelect, setTypeSelect] = useState("");
+
 
     async function getUser() {
         try {
@@ -22,6 +26,9 @@ export default function Form({ pictureUrl, displayName, address, message }) {
 
     const handleSubmitForm = (e) => {
         e.preventDefault()
+        console.log(detail, phone, typeSelect)
+        console.log(type)
+
 
     }
 
@@ -51,17 +58,17 @@ export default function Form({ pictureUrl, displayName, address, message }) {
                 <form onSubmit={((e) => handleSubmitForm(e))} className="text-gray-600 flex flex-col w-96   bg-pink-400">
                     {/* <button onClick={getLocation()}>Try It</button> */}
                     <span>รายละเอียดปัญหา :</span>
-                    <input className=" p-2 border-2 rounded-xl border-gray-500 focus:outline-blue-500" type="text" name="detail" placeholder="Enter message..." />
+                    <input onChange={(e) => setDetail(e.target.value)} className=" p-2 border-2 rounded-xl border-gray-500 focus:outline-blue-500" type="text" name="detail" placeholder="Enter message..." />
                     <span>เบอร์ติดต่อ :</span>
-                    <input className=" p-2 border-2 rounded-xl border-gray-500 focus:outline-blue-500" type="text" name="phone" placeholder="Enter phone number..." />
+                    <input onChange={(e) => setPhone(e.target.value)} className=" p-2 border-2 rounded-xl border-gray-500 focus:outline-blue-500" type="text" name="phone" placeholder="Enter phone number..." />
                     <span>ประเภท :</span>
-                    <select defaultValue={'DEFAULT'} className="mt-2 p-2 border-2 rounded-xl border-gray-500 focus:outline-blue-500" id="cars" name="type">
+                    <select value={typeSelect} onChange={(e) => setTypeSelect(e.target.value)} className="mt-2 p-2 border-2 rounded-xl border-gray-500 focus:outline-blue-500" id="cars" name="type">
                         <option value="DEFAULT" disabled hidden>Choose here</option>
-                        {type.map((item,index) => {
-                            return (
-                                <option key={index} value={item}>{item}</option>
+                        {
+                            type.map((value,index) => {
+                                return (<option key={index}  value={value}>{value}</option>)
+                            }
                             )
-                        })
                         }
                     </select>
                     <span>สถานที่ปัจจุบันของคุณ :</span>
