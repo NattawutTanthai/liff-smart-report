@@ -10,5 +10,5 @@ export default async function handler(req, res) {
         console.error("error",e);
         throw new Error(e).message;
     }
-  res.status(200).json({ name: 'John Doe' })
+//   res.status(200).json({ name: 'John Doe' })
 }

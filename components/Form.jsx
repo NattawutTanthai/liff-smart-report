@@ -1,8 +1,11 @@
 // 'use client';
 import { useEffect, useState } from 'react'
-import Image from 'next/image'
 import axios from 'axios'
-export default function Form({ pictureUrl, displayName, address }) {
+import dayjs from 'dayjs'
+import 'dayjs/locale/th'
+import Swal from 'sweetalert2'
+
+export default function Form({ lat, lon, imageBase64, displayName, address }) {
     const [type, setType] = useState([]);
     const [detail, setDetail] = useState("");
     const [phone, setPhone] = useState("");
@@ -24,56 +27,76 @@ export default function Form({ pictureUrl, displayName, address }) {
         getUser()
     }, [])
 
-    const handleSubmitForm = (e) => {
+    const handleSubmitForm = async (e) => {
         e.preventDefault()
-        console.log(detail, phone, typeSelect)
-        console.log(type)
+        console.log(detail, '\n', phone, '\n', typeSelect, '\n', address)
+        // console.log(imageBase64)
+        // dayjs.locale('th')
+        // const currentDate = dayjs();
+        // console.log(currentDate.valueOf());
+
+        axios.post('/api/postOrder', {
+            detail: detail, // รายละเอียดปัญหา
+            phone: phone, // เบอร์ติดต่อ
+            type: typeSelect, // ประเภทปัญหา
+            address: address, // ที่อยู่
+            lat: lat, // ละติจูด
+            lon: lon, // ลองติจูด
+            imgStart: imageBase64, // รูปภาพเริ่มต้น
+            imgEnd: 'NONE', // รูปภาพสิ้นสุด
+            startDate_timeStamp: currentDate.valueOf(), // เวลาเริ่ม
+            processDate_timeStamp: 'NONE', // เวลากำลังดำเนินการ
+            endDate_timeStamp: 'NONE', // เวลาสิ้นสุด
+            name: displayName, // ชื่อผู้ใช้
+            commentProcess: 'NONE', // ความคิดเห็นของผู้ดำเนินการ
+            commentEnd: 'NONE', // ความคิดเห็นสิ้นสุด
+        })
+            .then(function (response) {
+                console.log(response);
+                let timerInterval
+                Swal.fire({
+                    title: 'แจ้งปัญหาเสร็จสิ้น!',
+                    timer: 2000,
+                    timerProgressBar: true,
+                    didOpen: () => {
+                        Swal.showLoading()
+                        const b = Swal.getHtmlContainer().querySelector('b')
+                    }
 
 
+                }).then((result) => {
+                    /* Read more about handling dismissals below */
+                    if (result.dismiss === Swal.DismissReason.timer) {
+                        console.log('I was closed by the timer')
+                    }
+                })
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
     }
 
     return (
         <div>
-            <div className="flex justify-center">
-                {pictureUrl ?
-                    <Image
-                        className=" m-5 bg-gray-300 border-2 border-gray rounded-full w-36 h-36 drop-shadow-lg"
-                        src={pictureUrl}
-                        alt={displayName}
-                        width={500}
-                        height={500}
-                    /> :
-                    <Image
-                        className=" m-5 bg-gray-300 border-2 border-gray rounded-full w-36 h-36 drop-shadow-lg"
-                        src="https://www.w3schools.com/howto/img_avatar.png"
-                        alt='picture'
-                        width={500}
-                        height={500}
-                        priority={true}
-                    />
-                }
-            </div>
-            <div className="flex justify-center text-gray-600">Name : {displayName}</div>
-            <div className="flex justify-center bg-red-100 mt-20">
-                <form onSubmit={((e) => handleSubmitForm(e))} className="text-gray-600 flex flex-col w-96   bg-pink-400">
-                    {/* <button onClick={getLocation()}>Try It</button> */}
+            <div className="flex justify-center mt-2 mb-8">
+                <form onSubmit={((e) => handleSubmitForm(e))} className="text-gray-600 flex flex-col w-96   ">
                     <span>รายละเอียดปัญหา :</span>
-                    <input onChange={(e) => setDetail(e.target.value)} className=" p-2 border-2 rounded-xl border-gray-500 focus:outline-blue-500" type="text" name="detail" placeholder="Enter message..." />
+                    <input onChange={(e) => setDetail(e.target.value)} className=" p-2 border-2 rounded-xl border-gray-500 focus:outline-blue-500" type="text" name="detail" placeholder="Enter message..." required />
                     <span>เบอร์ติดต่อ :</span>
-                    <input onChange={(e) => setPhone(e.target.value)} className=" p-2 border-2 rounded-xl border-gray-500 focus:outline-blue-500" type="text" name="phone" placeholder="Enter phone number..." />
+                    <input onChange={(e) => setPhone(e.target.value)} className=" p-2 border-2 rounded-xl border-gray-500 focus:outline-blue-500" type="tel" name="phone" placeholder="Enter phone number..." required />
                     <span>ประเภท :</span>
-                    <select value={typeSelect} onChange={(e) => setTypeSelect(e.target.value)} className="mt-2 p-2 border-2 rounded-xl border-gray-500 focus:outline-blue-500" id="cars" name="type">
-                        <option value="DEFAULT" disabled hidden>Choose here</option>
+                    <select defaultValue={'DEFAULT'} onChange={(e) => setTypeSelect(e.target.value)} className="mt-2 p-2 border-2 rounded-xl border-gray-500 focus:outline-blue-500" id="cars" name="type" required>
+                        <option value="DEFAULT" disabled hidden>Select an Option</option>
                         {
-                            type.map((value,index) => {
-                                return (<option key={index}  value={value}>{value}</option>)
+                            type.map((value, index) => {
+                                return (<option key={index} value={value}>{value}</option>)
                             }
                             )
                         }
                     </select>
                     <span>สถานที่ปัจจุบันของคุณ :</span>
                     <input disabled className=" p-2 border-2 rounded-xl border-gray-500 focus:outline-blue-500" type="text" name="location" placeholder={address} />
-                    <button className="text-white p-1 mt-2 rounded-lg border border-gray-500  bg-emerald-500" type="submit" >save</button>
+                    <button className="text-white text-xl p-3 mt-2 rounded-lg border border-gray-500  bg-emerald-500" type="submit" >save</button>
                 </form>
             </div>
         </div>

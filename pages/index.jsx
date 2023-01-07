@@ -2,11 +2,14 @@ import Header from "../components/Header";
 import { useEffect, useState } from 'react'
 import Form from "../components/Form";
 import Camera from '../components/Camera';
+import ImageProfile from "../components/ImageProfile";
 
 export default function Home({type}) {
   const [profile, setProfile] = useState({})
   const [address, setAddress] = useState("")
   const [dataImage, setDataImage] = useState("")
+  const [lat , setLat] = useState("")
+  const [lon , setLon] = useState("")
 
   const setLocationState = async (lat, long) => {
     let apiUrl = "https://api.longdo.com/map/services/address?lon=" +
@@ -20,6 +23,8 @@ export default function Home({type}) {
   const getLatAndLon = () => {
     navigator.geolocation.getCurrentPosition(
       (position) => {
+        setLat(position.coords.latitude)
+        setLon(position.coords.longitude)
         setLocationState(position.coords.latitude, position.coords.longitude);
       },
       (error) => {
@@ -51,8 +56,9 @@ export default function Home({type}) {
   return (
     <div>
       <Header />
-      <Form displayName={profile.displayName} pictureUrl={profile.pictureUrl} address={address} />
+      <ImageProfile displayName={profile.displayName} pictureUrl={profile.pictureUrl} />
       <Camera dataImg={setDataImage} />
+      <Form lat={lat} lon={lon} imageBase64={dataImage} displayName={profile.displayName} address={address} />
     </div>
   );
 }
