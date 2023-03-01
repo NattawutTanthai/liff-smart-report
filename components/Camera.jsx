@@ -57,11 +57,11 @@ function Camera(props) {
                 </div>
                 <div className="flex flex-row">
                     {imgSrc == null ?
-                        <button className='drop-shadow-xl rounded-md w-full border-2 m-2 border-gray-400 bg-sky-300' onClick={capture}>ถ่ายรูป</button>
+                        <button className='drop-shadow-xl rounded-md w-full border-2 m-2 border-gray-400 bg-sky-500 text-white text-xl' onClick={capture}>ถ่ายรูป</button>
                         :
-                        <button className='drop-shadow-xl rounded-md w-full border-2 m-2 border-gray-400 bg-sky-300' onClick={() => setImgSrc(null)}>ถ่ายรูปใหม่</button>
+                        <button className='drop-shadow-xl rounded-md w-full border-2 m-2 border-gray-400 bg-sky-500' onClick={() => setImgSrc(null)}>ถ่ายรูปใหม่</button>
                     }
-                    <button className=' drop-shadow-xl p-3 rounded-md border-2 m-2 border-gray-400 bg-sky-300' onClick={handleClick}>
+                    <button className=' drop-shadow-xl p-3 rounded-md border-2 m-2 border-gray-400 bg-sky-500' onClick={handleClick}>
                     <div className="pt-1">
                         <span className="material-icons-two-tone">cameraswitch</span>
                     </div>

@@ -52,19 +52,21 @@ export default function Form({ lat, lon, displayName, imageBase64, address, type
                 lon: lon, // ลองติจูด
                 imgStart: imageBase64, // รูปภาพเริ่มต้น
                 imgEnd: 'NONE', // รูปภาพสิ้นสุด
-                startDate_timeStamp: currentDate.valueOf(), // เวลาเริ่ม
+                startDate_timeStamp: currentDate.unix(), // เวลาเริ่ม
                 processDate_timeStamp: 0, // เวลากำลังดำเนินการ
                 endDate_timeStamp: 0, // เวลาสิ้นสุด
+                empProcess: 'NONE', // ผู้ดำเนินการ
+                empEnd: 'NONE', // ผู้สิ้นสุด
                 commentProcess: 'NONE', // ความคิดเห็นของผู้ดำเนินการ
                 commentEnd: 'NONE', // ความคิดเห็นสิ้นสุด
-                status: 0, // สถานะ
+                status: 0 // สถานะ
             }
 
             try {
                 const res = await axios.post("/task", data)
-                .then((res)=>{
-                    console.log(res);
-                })
+                    .then((res) => {
+                        console.log(res);
+                    })
                 // console.log(result);
                 Swal.fire({
                     title: 'แจ้งปัญหาเสร็จสิ้น!',
