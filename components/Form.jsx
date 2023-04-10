@@ -63,22 +63,24 @@ export default function Form({ lat, lon, displayName, imageBase64, address, type
             }
 
             try {
-                const res = await axios.post("/task", data)
+                Swal.showLoading()
+                axios.post("/task", data)
                     .then((res) => {
-                        console.log(res);
+                        Swal.hideLoading()
+                        Swal.fire({
+                            title: 'แจ้งปัญหาเสร็จสิ้น!',
+                            timer: 2000,
+                            timerProgressBar: true,
+                            didOpen: () => {
+                                Swal.showLoading()
+                                const b = Swal.getHtmlContainer().querySelector('b')
+                            }
+                        }).then((result) => {
+                            router.reload();
+                        })
                     })
                 // console.log(result);
-                Swal.fire({
-                    title: 'แจ้งปัญหาเสร็จสิ้น!',
-                    timer: 2000,
-                    timerProgressBar: true,
-                    didOpen: () => {
-                        Swal.showLoading()
-                        const b = Swal.getHtmlContainer().querySelector('b')
-                    }
-                }).then((result) => {
-                    router.reload();
-                })
+
             } catch (error) {
                 console.error(error);
                 setErrors(error);
