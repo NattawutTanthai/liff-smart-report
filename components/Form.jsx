@@ -1,35 +1,18 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useRouter } from 'next/router';
 import dayjs from 'dayjs'
 import 'dayjs/locale/th'
 import Swal from 'sweetalert2'
 import Axios from '../axios.config'
-import axios from 'axios'
 
 
 export default function Form({ lat, lon, displayName, imageBase64, address, typeData }) {
-    const token_group = {
-        token_bin: "mPowMUb0CtGMXW3GWdSkBCSjzVSyxWpl7IyIAvtvq4g",
-        token_school: "EVb9MXEomIzpGRwQsBMuFDAfTnv3MhEDu7DPkFimwej",
-        token_road: "b8PFtPNsdkb9uMy4UFydn11VHfKNI8iE7NlruulmfIK",
-    }
     const router = useRouter();
     const [type, setType] = useState([]);
     const [detail, setDetail] = useState("");
     const [phone, setPhone] = useState("");
     const [typeSelect, setTypeSelect] = useState("");
     const [errors, setErrors] = useState("");
-
-    const ck_type = async (data) => {
-        if (data = "ขยะ") {
-            return token_group.token_bin;
-        } else if (data = "ถนน") {
-            return token_group.token_road;
-        } else if (data == "ห้องเรียน") {
-            return token_group.token_school;
-        }
-    }
-
 
     const handleSubmitForm = async (e) => {
         e.preventDefault()
@@ -80,43 +63,28 @@ export default function Form({ lat, lon, displayName, imageBase64, address, type
                 status: 0 // สถานะ
             }
 
-            // try {
-            //     Swal.showLoading()
-            //     Axios.post("/task", data)
-            //         .then((res) => {
-
-                        axios.post("https://notify-api.line.me/api/notify", {
-                            message: `มีคำร้องใหม่จาก ${displayName} ประเภท ${typeSelect} ที่ ${address} กรุณาดำเนินการ`,
-                        }, {
-                            headers: {
-                                "Content-Type": "application/x-www-form-urlencoded",
-                                "Authorization": "Bearer EVb9MXEomIzpGRwQsBMuFDAfTnv3MhEDu7DPkFimwej"
-                            },
+            try {
+                Swal.showLoading()
+                Axios.post("/task", data)
+                    .then((res) => {
+                        Swal.hideLoading()
+                        Swal.fire({
+                            title: 'แจ้งปัญหาเสร็จสิ้น!',
+                            timer: 2000,
+                            timerProgressBar: true,
+                            didOpen: () => {
+                                Swal.showLoading()
+                                const b = Swal.getHtmlContainer().querySelector('b')
+                            }
                         }).then((result) => {
-                            console.log(result);
-                        }).catch((err) => {
-                            console.log(err);
+                            router.reload();
                         })
+                    })
 
-                    //     Swal.hideLoading()
-                    //     Swal.fire({
-                    //         title: 'แจ้งปัญหาเสร็จสิ้น!',
-                    //         timer: 2000,
-                    //         timerProgressBar: true,
-                    //         didOpen: () => {
-                    //             Swal.showLoading()
-                    //             const b = Swal.getHtmlContainer().querySelector('b')
-                    //         }
-                    //     }).then((result) => {
-                    //         router.reload();
-                    //     })
-                    // })
-                // console.log(result);
-
-            // } catch (error) {
-            //     console.error(error);
-            //     setErrors(error);
-            // }
+            } catch (error) {
+                console.error(error);
+                setErrors(error);
+            }
         }
     }
 
