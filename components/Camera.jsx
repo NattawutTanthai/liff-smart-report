@@ -30,6 +30,7 @@ function Camera(props) {
     return (
         <>
             <div className=' flex flex-col justify-center mt-10 p-3'>
+                <span className="mb-2">ถ่ายรูปปัญหาของคุณ :</span>
                 <div className="flex flex-row ">
                     {imgSrc == null ?
                         <Webcam
